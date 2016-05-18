@@ -106,7 +106,7 @@ class World
     @goodIntersections = _.filter( @intersections.all() , (i) -> i.roads.length == 1 )
     @workingIntersections = _.filter( @intersections.all() , (i) -> i.roads.length != 1 )
     @carsNumber = 0
-    for id, i of @intersections.all()
+    for i in @goodIntersections
       #console.log(i.lambda)
       @carsNumber = @carsNumber + i.lambda
 
@@ -215,6 +215,7 @@ class World
     road.source.roads.push road
     road.target.inRoads.push road
     road.update()
+    @initStat()
 
   getRoad: (id) ->
     @roads.get id

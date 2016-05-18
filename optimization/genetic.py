@@ -6,18 +6,13 @@ from pprint import pprint
 from pyevolve import *
 import pyevolve
 
-wi = ['intersection153', 'intersection154']
-T = 3.0
+wi = []
+T = 4.0
 B = 0.1
 
 results = []
 
 def run_experiment(delays):
-  # dirty hack
-  for d in delays:
-    if d < B or d > T:
-      return 100000
-  #
   data = None
   i = 0
   print(delays)
@@ -43,12 +38,12 @@ def run_experiment(delays):
 
 def GA():
   # Genome instance
-  genome = G1DList.G1DList(8)
+  genome = G1DList.G1DList(len(wi) * 4)
 
   # The evaluator function (objective function)
   genome.evaluator.set(run_experiment)
   genome.setParams(rangemin=B, rangemax=T)
-  genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
+  genome.mutator.set(Mutators.G1DListMutatorRealGaussian) # G1DListMutatorRealRange 
   genome.crossover.set(Crossovers.G1DListCrossoverSinglePoint)
   genome.initializator.set(Initializators.G1DListInitializatorReal)
   
@@ -67,10 +62,20 @@ def GA():
 
 def main():
   np.random.seed(555)   # Seeded to allow replication.
+  
+  with open('../experiments/map.copy.json', 'r') as data_file:    
+    data = json.load(data_file)
+    for i in data["workingIntersections"]:
+      wi.append(i["id"])
+  
+  print(wi)
+  
   GA()
-  with open('ga_results', 'w') as data_file:
+  # run_experiment([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+  
+  with open('ga_results_map_2', 'w') as data_file:
     for r in results:
       data_file.write(str(r)+"\n")
 
 if __name__ == "__main__":
-    main()
+  main()

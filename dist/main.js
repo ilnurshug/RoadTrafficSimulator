@@ -1528,7 +1528,7 @@ World = (function() {
   };
 
   World.prototype.initStat = function() {
-    var i, id, _i, _len, _ref, _ref1, _results;
+    var i, _i, _j, _len, _len1, _ref, _ref1, _results;
     this.goodIntersections = _.filter(this.intersections.all(), function(i) {
       return i.roads.length === 1;
     });
@@ -1536,9 +1536,9 @@ World = (function() {
       return i.roads.length !== 1;
     });
     this.carsNumber = 0;
-    _ref = this.intersections.all();
-    for (id in _ref) {
-      i = _ref[id];
+    _ref = this.goodIntersections;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      i = _ref[_i];
       this.carsNumber = this.carsNumber + i.lambda;
     }
     this.prob = _.map(this.goodIntersections, function(i) {
@@ -1552,8 +1552,8 @@ World = (function() {
       this.F[0] = this.prob[0][0];
       _ref1 = _.range(1, this.goodIntersections.length);
       _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        i = _ref1[_i];
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        i = _ref1[_j];
         _results.push(this.F[i] = this.F[i - 1] + this.prob[i][0]);
       }
       return _results;
@@ -1710,7 +1710,8 @@ World = (function() {
     this.roads.put(road);
     road.source.roads.push(road);
     road.target.inRoads.push(road);
-    return road.update();
+    road.update();
+    return this.initStat();
   };
 
   World.prototype.getRoad = function(id) {
