@@ -3,10 +3,13 @@ import json
 import os
 from scipy import optimize
 from pprint import pprint
+import matplotlib.pyplot as plt
 
 wi = ['intersection153', 'intersection154']
 T = 3.0
 B = 0.1
+
+results = []
 
 def run_experiment(delays, *params):
   # dirty hack
@@ -33,6 +36,7 @@ def run_experiment(delays, *params):
   res = 0
   with open('../experiments/0.data', 'r') as data_file:  
     res = [float(x) for x in next(data_file).split()][0]
+  results.append(res)
   return res
   
   
@@ -55,6 +59,10 @@ def main():
   np.random.seed(555)   # Seeded to allow replication.
   res = optimize.anneal(run_experiment, x0, schedule='boltzmann', full_output=True, maxiter=500, lower=B, upper=T, dwell=30, disp=True)
   print(res)
+  
+  plt.plot(results)
+  plt.ylabel('avg waiting time')
+  plt.show()
 
 
 if __name__ == "__main__":

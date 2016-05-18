@@ -10,6 +10,8 @@ wi = ['intersection153', 'intersection154']
 T = 3.0
 B = 0.1
 
+results = []
+
 def run_experiment(delays):
   # dirty hack
   for d in delays:
@@ -35,6 +37,7 @@ def run_experiment(delays):
   res = 0
   with open('../experiments/0.data', 'r') as data_file:  
     res = [float(x) for x in next(data_file).split()][0]
+  results.append(res)
   return 1000.0-res
   
 
@@ -53,9 +56,9 @@ def GA():
   ga.selector.set(Selectors.GRouletteWheel)
   
   ga.setPopulationSize(10)
-  ga.setGenerations(50)
+  ga.setGenerations(60)
   # Do the evolution, with stats dump
-  # frequency of 10 generations
+  # frequency of 5 generations
   
   ga.evolve(freq_stats=5)
 
@@ -65,6 +68,9 @@ def GA():
 def main():
   np.random.seed(555)   # Seeded to allow replication.
   GA()
+  with open('ga_results', 'w') as data_file:
+    for r in results:
+      data_file.write(str(r)+"\n")
 
 if __name__ == "__main__":
     main()
