@@ -7,7 +7,7 @@ from pyevolve import *
 import pyevolve
 
 wi = []
-T = 4.0
+T = 3.0
 B = 0.1
 
 results = []
@@ -44,14 +44,15 @@ def GA():
   genome.evaluator.set(run_experiment)
   genome.setParams(rangemin=B, rangemax=T)
   genome.mutator.set(Mutators.G1DListMutatorRealGaussian) # G1DListMutatorRealRange 
-  genome.crossover.set(Crossovers.G1DListCrossoverSinglePoint)
+  genome.crossover.set(Crossovers.G1DListCrossoverTwoPoint) # Single
   genome.initializator.set(Initializators.G1DListInitializatorReal)
   
   ga = GSimpleGA.GSimpleGA(genome)
   ga.selector.set(Selectors.GRouletteWheel)
   
   ga.setPopulationSize(10)
-  ga.setGenerations(60)
+  ga.setGenerations(50)
+  ga.setMutationRate(0.05)
   # Do the evolution, with stats dump
   # frequency of 5 generations
   
@@ -67,11 +68,13 @@ def main():
     data = json.load(data_file)
     for i in data["workingIntersections"]:
       wi.append(i["id"])
+  #global wi
+  #wi = ['intersection282', 'intersection283', 'intersection285']
   
   print(wi)
   
   GA()
-  # run_experiment([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+  #run_experiment([1] * (len(wi)*4))
   
   with open('ga_results_map_2', 'w') as data_file:
     for r in results:

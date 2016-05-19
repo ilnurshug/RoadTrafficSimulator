@@ -95,6 +95,9 @@ class Car
           if currentLane.road.getTurnDirection(r) >= 1
             possibleRoads.push r
 
+    if possibleRoads.length is 0
+      possibleRoads = intersection.roads.filter (x) -> x.target isnt currentLane.road.source
+
     return null if possibleRoads.length is 0
     nextRoad = _.sample possibleRoads
 

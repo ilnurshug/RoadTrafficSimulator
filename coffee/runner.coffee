@@ -27,15 +27,28 @@ measureAverageWaitingTime = () ->
   map = fs.readFileSync '../experiments/map.copy.json', {encoding: 'utf8'}
   world.load map
   for i in [0..10000]
-    world.onTick 0.1
+    world.onTick 0.3
   avg = 0.0
   cnt = 0
   for id, t of world.intersectionAvgWaitingTime
-    if t > 0
+    if t > 10.0
       avg = avg + t
       cnt = cnt + 1
+      #console.log(t)
   avg = avg / cnt
   avg
+
+measureMaxAverageWaitingTime = () ->
+  world = new World()
+  map = fs.readFileSync '../experiments/map.copy.json', {encoding: 'utf8'}
+  world.load map
+  for i in [0..5000]
+    world.onTick 0.3
+  max_t = 0.0
+  for id, t of world.intersectionAvgWaitingTime
+    if t > max_t
+      max_t = t
+  max_t
 
 generateData = () ->
   t = []
@@ -88,6 +101,12 @@ settings.lightsFlipInterval = 160
 experiment0 = () ->
   out = fs.createWriteStream '../experiments/0.data'
   result = measureAverageWaitingTime()
+  console.log result
+  out.write(result + ' ');
+
+experiment01 = () ->
+  out = fs.createWriteStream '../experiments/0.data'
+  result = measureMaxAverageWaitingTime()
   console.log result
   out.write(result + ' ');
 

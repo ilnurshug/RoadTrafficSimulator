@@ -55,7 +55,7 @@ class World
     #  i.controlSignals.delayMultiplier = [0.5,0.5,0.5,0.5]
     #  i.lambda = 0
     #for i in @goodIntersections
-    #  i.lambda = _.sample (_.range 10)
+    #  i.lambda = _.sample (_.range 47)
     data = _.extend {}, this
     delete data.cars
     localStorage.world = JSON.stringify data

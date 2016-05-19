@@ -499,31 +499,12 @@ Car = (function() {
   };
 
   Car.prototype.pickNextRoad = function() {
-    var currentLane, intersection, nextRoad, possibleRoads, r, _i, _j, _len, _len1, _ref, _ref1;
+    var currentLane, intersection, nextRoad, possibleRoads;
     intersection = this.trajectory.nextIntersection;
     currentLane = this.trajectory.current.lane;
-    possibleRoads = [];
-    if (currentLane.isLeftmost) {
-      _ref = intersection.roads;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        r = _ref[_i];
-        if (r.target !== currentLane.road.source) {
-          if (currentLane.road.getTurnDirection(r) === 0) {
-            possibleRoads.push(r);
-          }
-        }
-      }
-    } else {
-      _ref1 = intersection.roads;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        r = _ref1[_j];
-        if (r.target !== currentLane.road.source) {
-          if (currentLane.road.getTurnDirection(r) >= 1) {
-            possibleRoads.push(r);
-          }
-        }
-      }
-    }
+    possibleRoads = intersection.roads.filter(function(x) {
+      return x.target !== currentLane.road.source;
+    });
     if (possibleRoads.length === 0) {
       return null;
     }

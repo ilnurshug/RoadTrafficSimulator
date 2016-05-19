@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def main():
-  with open('ga_results', 'r') as data_file:  
+  with open('ga_results_map_2', 'r') as data_file:  
     res = [[float(x) for x in line.split()][0] for line in data_file]
     
     def chunks(l, n):
